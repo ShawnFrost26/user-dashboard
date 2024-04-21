@@ -16,6 +16,12 @@ const AddUser = ({ onAdd }) => {
     email: '',
     company: ''
   });
+  const [errors, setErrors] = useState({
+    name: '',
+    username: '',
+    email: '',
+    company: '',
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -28,19 +34,59 @@ const AddUser = ({ onAdd }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewUser({ ...newUser, [name]: value });
+    // Reset the error for the field when user starts typing again
+    setErrors({ ...errors, [name]: '' });
+  };
+
+  const validateInputs = () => {
+    let isValid = true;
+    const newErrors = { ...errors };
+
+    // Validate name
+    if (!newUser.name) {
+      newErrors.name = "Name is required";
+      isValid = false;
+    }
+
+    // Validate username
+    if (!newUser.username) {
+      newErrors.username = "Username is required";
+      isValid = false;
+    }
+
+    // Validate email
+    if (!newUser.email) {
+      newErrors.email = "Email is required";
+      isValid = false;
+    } else if (!/^\S+@\S+\.\S+$/.test(newUser.email)) {
+      newErrors.email = "Invalid email address";
+      isValid = false;
+    }
+
+    // Validate company
+    if (!newUser.company) {
+      newErrors.company = "Company is required";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const handleAdd = () => {
-    onAdd(newUser);
-    setOpen(false);
-    // Reset the form fields after adding the user
-    setNewUser({
-      name: '',
-      username: '',
-      email: '',
-      company: ''
-    });
-  }
+    if (validateInputs()) {
+      onAdd(newUser);
+      setOpen(false);
+      // Reset the form fields after adding the user
+      setNewUser({
+        name: '',
+        username: '',
+        email: '',
+        company: ''
+      });
+    }
+  };
+
   return (
     <div>
       <Button onClick={handleClickOpen}>Add User</Button>
@@ -57,6 +103,8 @@ const AddUser = ({ onAdd }) => {
             name="name"
             value={newUser.name}
             onChange={handleInputChange}
+            error={Boolean(errors.name)}
+            helperText={errors.name}
           />
           <TextField
             margin="dense"
@@ -67,6 +115,8 @@ const AddUser = ({ onAdd }) => {
             name="username"
             value={newUser.username}
             onChange={handleInputChange}
+            error={Boolean(errors.username)}
+            helperText={errors.username}
           />
           <TextField
             margin="dense"
@@ -77,6 +127,8 @@ const AddUser = ({ onAdd }) => {
             name="email"
             value={newUser.email}
             onChange={handleInputChange}
+            error={Boolean(errors.email)}
+            helperText={errors.email}
           />
           <TextField
             margin="dense"
@@ -87,6 +139,8 @@ const AddUser = ({ onAdd }) => {
             name="company"
             value={newUser.company}
             onChange={handleInputChange}
+            error={Boolean(errors.company)}
+            helperText={errors.company}
           />
         </DialogContent>
         <DialogActions>
