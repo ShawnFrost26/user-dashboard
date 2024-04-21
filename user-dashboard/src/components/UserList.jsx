@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import { getUsers } from './FetchData';
+import { getUsers, API_URL } from './FetchData';
 import DeleteUser from './DeleteUser';
 
 const UserList = () => {
@@ -11,6 +11,21 @@ const UserList = () => {
       .then(data => setUsers(data))
       .catch(error => console.error('Error fetching users:', error));
   }, []);
+
+  const handleDelete = async (userId) => {
+    try {
+      const response = await fetch(`${API_URL}/${userId}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete user');
+      }
+      // Remove the deleted user from the list
+      setUsers(users.filter(user => user.id !== userId));
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
 
   return (
     <TableContainer component={Paper}>
@@ -35,7 +50,7 @@ const UserList = () => {
               <TableCell>{user.company.name}</TableCell>
               <TableCell>
                 <Button>Edit</Button>
-                <DeleteUser/>
+                <DeleteUser userId={user.id} onDelete={handleDelete} />
               </TableCell>
             </TableRow>
           ))}

@@ -1,13 +1,27 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
-const DeleteUser = () => {
+const DeleteUser = ({ userId, onDelete }) => {
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
+  
+    const handleDelete = () => {
+      onDelete(userId);
+      setOpen(false);
+    };
 
 
   return (
     <div>
-      <Button>Delete</Button>
-      <Dialog>
+      <Button onClick={handleClickOpen}>Delete</Button>
+      <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Delete User</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -15,8 +29,8 @@ const DeleteUser = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button>Cancel</Button>
-          <Button autoFocus>
+          <Button  onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleDelete} autoFocus>
             Delete
           </Button>
         </DialogActions>
