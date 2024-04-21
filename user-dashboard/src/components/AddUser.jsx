@@ -10,6 +10,12 @@ import {
 
 const AddUser = () => {
   const [open, setOpen] = useState(false);
+  const [newUser, setNewUser] = useState({
+    name: '',
+    username: '',
+    email: '',
+    company: ''
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -17,6 +23,10 @@ const AddUser = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleInputChange = () => {
+
   };
 
   return (
@@ -33,6 +43,8 @@ const AddUser = () => {
             type="text"
             fullWidth
             name="name"
+            value={newUser.name}
+            onChange={handleInputChange}
           />
           <TextField
             margin="dense"
@@ -41,6 +53,8 @@ const AddUser = () => {
             type="text"
             fullWidth
             name="username"
+            value={newUser.username}
+            onChange={handleInputChange}
           />
           <TextField
             margin="dense"
@@ -49,6 +63,8 @@ const AddUser = () => {
             type="email"
             fullWidth
             name="email"
+            value={newUser.email}
+            onChange={handleInputChange}
           />
           <TextField
             margin="dense"
@@ -57,6 +73,8 @@ const AddUser = () => {
             type="text"
             fullWidth
             name="company"
+            value={newUser.company}
+            onChange={handleInputChange}
           />
         </DialogContent>
         <DialogActions>
