@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { getUsers } from './FetchData';
+import DeleteUser from './DeleteUser';
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -34,7 +35,7 @@ const UserList = () => {
               <TableCell>{user.company.name}</TableCell>
               <TableCell>
                 <Button>Edit</Button>
-                <Button>Delete</Button>
+                <DeleteUser/>
               </TableCell>
             </TableRow>
           ))}
