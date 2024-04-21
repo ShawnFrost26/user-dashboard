@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { getUsers, API_URL } from './FetchData';
 import DeleteUser from './DeleteUser';
+import EditUser from './EditUser';
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -27,6 +28,25 @@ const UserList = () => {
     }
   };
 
+  const handleEdit = async (editedUser) => {
+    try {
+      const response = await fetch(`${API_URL}/${editedUser.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editedUser),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update user');
+      }
+      // Update the user in the list with the edited user
+      setUsers(users.map(user => (user.id === editedUser.id ? editedUser : user)));
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -49,7 +69,7 @@ const UserList = () => {
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.company.name}</TableCell>
               <TableCell>
-                <Button>Edit</Button>
+              <EditUser user={user} onSave={handleEdit} />
                 <DeleteUser userId={user.id} onDelete={handleDelete} />
               </TableCell>
             </TableRow>

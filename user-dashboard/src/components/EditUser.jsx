@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 
-const EditUser = ({user}) => {
+const EditUser = ({ user, onSave }) => {
   const [open, setOpen] = useState(false);
   const [editedUser, setEditedUser] = useState(user);
 
@@ -14,13 +14,27 @@ const EditUser = ({user}) => {
   };
 
 
-const handleInputChange = () => {
-
+const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name === 'companyName') {
+      // Update the company name within the user object
+      setEditedUser({
+        ...editedUser,
+        company: {
+          ...editedUser.company,
+          name: value
+        }
+      });
+    } else {
+      // For other fields, update directly in the user object
+      setEditedUser({ ...editedUser, [name]: value });
+    }
   };
   
 
   const handleSave = () => {
-  
+    onSave(editedUser);
+    setOpen(false);
   };
 
   return (
