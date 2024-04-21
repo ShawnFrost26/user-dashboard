@@ -58,9 +58,37 @@ const UserList = () => {
     }
   };
 
+  const handleAdd = async (newUser) => {
+    try {
+      // Ensure that the company details are properly included in the new user object
+      const completeUser = {
+        ...newUser,
+        company: {
+          name: newUser.company
+        }
+      };
+  
+      const response = await fetch(`${API_URL}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(completeUser),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to add user');
+      }
+      // Add the new user to the list
+      const data = await response.json();
+      setUsers(prevUsers => [...prevUsers, data]);
+    } catch (error) {
+      console.error('Error adding user:', error);
+    }
+  };
+
   return (
     <>
-      <AddUser />
+      <AddUser onAdd={handleAdd} />
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
