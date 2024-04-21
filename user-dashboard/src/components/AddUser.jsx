@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 
-const AddUser = () => {
+const AddUser = ({ onAdd }) => {
   const [open, setOpen] = useState(false);
   const [newUser, setNewUser] = useState({
     name: '',
@@ -25,10 +25,22 @@ const AddUser = () => {
     setOpen(false);
   };
 
-  const handleInputChange = () => {
-
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewUser({ ...newUser, [name]: value });
   };
 
+  const handleAdd = () => {
+    onAdd(newUser);
+    setOpen(false);
+    // Reset the form fields after adding the user
+    setNewUser({
+      name: '',
+      username: '',
+      email: '',
+      company: ''
+    });
+  }
   return (
     <div>
       <Button onClick={handleClickOpen}>Add User</Button>
@@ -79,7 +91,7 @@ const AddUser = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button>Add</Button>
+          <Button onClick={handleAdd}>Add</Button>
         </DialogActions>
       </Dialog>
     </div>
